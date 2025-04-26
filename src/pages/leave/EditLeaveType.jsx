@@ -1,9 +1,12 @@
 import styled from "styled-components";
+import {useState} from "react";
 import Header from "../../components/Header.jsx";
 import Button from "../../components/Button.jsx";
 import Input from "../../components/Input.jsx";
 
 const EditLeaveType = () => {
+    const [newName, setNewName] = useState("");
+
     return (
         <>
             <Header/>
@@ -11,7 +14,7 @@ const EditLeaveType = () => {
                 <PS>연차 유형 수정</PS>
 
                 <DivS>
-                    <span>특별 휴가</span> ➡️ <SpanS>여름 휴가</SpanS>
+                    <span>특별 휴가</span> {newName && <> ➡️ <SpanS>{newName}</SpanS></>}
                 </DivS>
 
                 <FormS>
@@ -22,6 +25,7 @@ const EditLeaveType = () => {
                         {/*TODO 백엔드 API로 가져온 연차 유형 이름으로 defaultValue 지정*/}
                         <Input
                             id={"leave-type-name"}
+                            onChange={(e) => setNewName(e.target.value)}
                             placeholder={"연차 유형 이름을 입력해주세요"}
                             defaultValue={"특별 휴가"}
                             width={"400px"}
@@ -75,7 +79,7 @@ const FormS = styled.form`
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    
+
     Button {
         @media (max-width: 768px) {
             width: 284px;
@@ -99,7 +103,7 @@ const FormGroup = styled.div`
 const DivS = styled.div`
     text-align: center;
     margin-bottom: 10px;
-    
+
     span {
         background-color: white;
         padding: 5px 10px;
@@ -107,7 +111,6 @@ const DivS = styled.div`
         margin-right: 5px;
         margin-left: 5px;
     }
-    
     
     @media (max-width: 768px) {
         font-size: 13px;
