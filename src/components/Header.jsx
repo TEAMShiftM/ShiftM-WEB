@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import LOGO from "../assets/logo.png";
 import Button from "./Button.jsx";
 
 const Header = () => {
     return (
         <HeaderS>
             <LogoS>
-                <img src={LOGO} alt="shiftM"/>
+                <img src="/logo.png" alt="shiftM"/>
             </LogoS>
             <ButtonS>
                 <Button text={"로그인"} color={"blue"}/>
