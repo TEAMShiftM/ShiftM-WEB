@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
 import CheckInModal from "../components/CheckInModal";
+import WeeklyShiftSummary from "../components/WeeklyShiftSummary";
+import WeeklyProgressBar from "../components/WeeklyProgressBar";
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -9,12 +11,12 @@ const Home = () => {
 
   const handleButtonClick = () => {
     if (status === "working") {
-      setStatus("checkedOut"); // 퇴근 처리
-    } else if (status === "none" || status === "checkedOut") {
-      setIsModalOpen(true); // 출근 처리
+      setStatus("checkedOut");
+    } else {
+      setIsModalOpen(true);
     }
   };
-  
+
   const handleConfirmCheckIn = () => {
     setStatus("working");
     setIsModalOpen(false);
@@ -35,8 +37,7 @@ const Home = () => {
 
   return (
     <BackgroundWrapper>
-        <Header />
-
+      <Header />
       <Container>
         <DateRow>
           <DateText>2025년 2월 3일 월요일</DateText>
@@ -48,7 +49,7 @@ const Home = () => {
 
         <Card>
           <CardTitle>
-            오늘 근무{" "}
+            오늘 근무
             {status === "working" && <WorkingBadge>근무중</WorkingBadge>}
             {status === "checkedOut" && <WorkingBadge>퇴근</WorkingBadge>}
           </CardTitle>
@@ -60,23 +61,8 @@ const Home = () => {
 
         <Card>
           <SectionTitle>이번주 근무</SectionTitle>
-          <WeekList>
-            {weeklyData.map((d, i) => (
-              <DayCard key={i} active={d.start !== ""}>
-                <DayName isSunday={i === 0} isSaturday={i === 6}>
-                  {d.day}
-                </DayName>
-                <TimeText>
-                  {d.start && d.end ? `${d.start}\n${d.end}` : "일정\n없음"}
-                </TimeText>
-              </DayCard>
-            ))}
-          </WeekList>
-          <ProgressBarContainer>
-            <ProgressBarFill width={(totalHours / maxHours) * 100 + "%"} />
-            <BarTextLeft>0시간</BarTextLeft>
-            <BarTextRight>{maxHours}시간</BarTextRight>
-          </ProgressBarContainer>
+          <WeeklyShiftSummary weeklyData={weeklyData} />
+          <WeeklyProgressBar totalHours={totalHours} maxHours={maxHours} />
         </Card>
 
         <CheckInModal
@@ -92,7 +78,6 @@ const Home = () => {
 
 export default Home;
 
-// styled-components
 const BackgroundWrapper = styled.div`
   background-color: #f5f9ff;
   min-height: 100vh;
@@ -110,7 +95,6 @@ const DateRow = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.2rem;
-
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: flex-start;
@@ -146,14 +130,13 @@ const OutlineButton = styled(FillButton)`
 const Card = styled.div`
   background: white;
   border-radius: 16px;
-  padding: 2.5rem 3.0rem;
+  padding: 2.5rem 3rem;
   margin-bottom: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 `;
 
 const CardTitle = styled.h2`
   font-size: 1.2rem;
-  margin-top: 0em;
   margin-bottom: 0.5rem;
 `;
 
@@ -184,65 +167,5 @@ const WorkingBadge = styled.span`
 
 const SectionTitle = styled.h3`
   font-size: 1.1rem;
-  margin-top: 0rem;
   margin-bottom: 1rem;
-`;
-
-const WeekList = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: nowrap;
-  gap: 0.1rem;
-`;
-
-const DayCard = styled.div`
-  background-color: ${({ active }) => (active ? "#dceeff" : "#eaf0f6")};
-  border-radius: 12px;
-  width: 90px;
-  height: 90px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-`;
-
-const DayName = styled.p`
-  font-weight: bold;
-  margin: 0;
-  font-size: 1rem;
-  color: ${({ isSunday, isSaturday }) =>
-    isSunday ? "red" : isSaturday ? "#2f5fd7" : "#444"};
-`;
-
-const TimeText = styled.p`
-  font-size: 0.85rem;
-  white-space: pre-line;
-  margin: 0;
-`;
-
-const ProgressBarContainer = styled.div`
-  margin-top: 2.5rem;
-  position: relative;
-  height: 18px;
-  background: #e0ecf8;
-`;
-
-const ProgressBarFill = styled.div`
-  background: #4ea3ff;
-  height: 100%;
-  width: ${({ width }) => width};
-`;
-
-const BarTextLeft = styled.span`
-  position: absolute;
-  top: 20px;
-  left: 0;
-  font-size: 0.8rem;
-  color: #555;
-`;
-
-const BarTextRight = styled(BarTextLeft)`
-  left: auto;
-  right: 0;
 `;

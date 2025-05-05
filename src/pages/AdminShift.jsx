@@ -1,6 +1,8 @@
-// pages/AdminShifts.jsx
 import React from "react";
 import styled from "styled-components";
+import WeeklyShiftSummary from "../components/WeeklyShiftSummary";
+import WeeklyProgressBar from "../components/WeeklyProgressBar";
+import Header from "../components/Header";
 
 const AdminShifts = () => {
   const weeklyData = [
@@ -17,83 +19,75 @@ const AdminShifts = () => {
   const maxHours = 52;
 
   return (
-    <PageWrapper>
-      <HeaderRow>
-        <DateText>2025년 2월 3일 월요일</DateText>
-        <ExcelButton>엑셀 파일 변환</ExcelButton>
-      </HeaderRow>
+    <Wrapper>
+      <Header />
+      <Content>
+        <TitleRow>
+          <DateText>2025년 2월 3일 월요일</DateText>
+          <ExcelButton>엑셀 파일 변환</ExcelButton>
+        </TitleRow>
 
-      <Card>
-        <CardTitle>오늘 근무</CardTitle>
-        <StatsRow>
-          <StatBlock>
-            <StatLabel>출근 / 퇴근</StatLabel>
-            <StatValue>50 / 0</StatValue>
-          </StatBlock>
-          <StatBlock>
-            <StatLabel>지각 / 조퇴</StatLabel>
-            <StatValue>0 / 0</StatValue>
-          </StatBlock>
-          <StatBlock>
-            <StatLabel>결근</StatLabel>
-            <StatValue>0</StatValue>
-          </StatBlock>
-        </StatsRow>
-      </Card>
+        <Card>
+          <CardTitle>오늘 근무</CardTitle>
+          <StatsRow>
+            <StatBox>
+              <Label>출근 / 퇴근</Label>
+              <StatValue>50 / 0</StatValue>
+            </StatBox>
+            <StatBox>
+              <Label>지각 / 조퇴</Label>
+              <StatValue>0 / 0</StatValue>
+            </StatBox>
+            <StatBox>
+              <Label>결근</Label>
+              <StatValue>0</StatValue>
+            </StatBox>
+          </StatsRow>
+        </Card>
 
-      <Card>
-        <CardTitle>이번주 근무 평균</CardTitle>
-        <WeekList>
-          {weeklyData.map((d, i) => (
-            <DayCard key={i} active={d.start !== ""}>
-              <DayName isSunday={i === 0} isSaturday={i === 6}>
-                {d.day}
-              </DayName>
-              <TimeText>
-                {d.start && d.end ? `${d.start}\n${d.end}` : "일정\n없음"}
-              </TimeText>
-            </DayCard>
-          ))}
-        </WeekList>
-        <ProgressBarContainer>
-          <ProgressBarFill width={(totalHours / maxHours) * 100 + "%"} />
-          <BarTextLeft>0시간</BarTextLeft>
-          <BarTextRight>{maxHours}시간</BarTextRight>
-        </ProgressBarContainer>
-      </Card>
-    </PageWrapper>
+        <Card>
+          <SectionTitle>이번주 근무 평균</SectionTitle>
+          <WeeklyShiftSummary weeklyData={weeklyData} />
+          <WeeklyProgressBar totalHours={totalHours} maxHours={maxHours} />
+        </Card>
+      </Content>
+    </Wrapper>
   );
 };
 
 export default AdminShifts;
 
-const PageWrapper = styled.div`
+const Wrapper = styled.div`
   background-color: #f5f9ff;
   min-height: 100vh;
-  padding: 2rem 1.5rem;
-  max-width: 1080px;
-  margin: 0 auto;
 `;
 
-const HeaderRow = styled.div`
+const Content = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+`;
+
+const TitleRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
 `;
 
-const DateText = styled.h2`
+const DateText = styled.p`
   font-size: 1.1rem;
-  color: #333;
+  color: #444;
 `;
 
 const ExcelButton = styled.button`
   border: 1px solid #4ea3ff;
-  background: white;
   color: #4ea3ff;
   padding: 0.5rem 1rem;
+  background-color: white;
   border-radius: 12px;
   font-size: 0.9rem;
+  cursor: pointer;
 `;
 
 const Card = styled.div`
@@ -101,85 +95,37 @@ const Card = styled.div`
   border-radius: 16px;
   padding: 2rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 `;
 
-const CardTitle = styled.h3`
+const CardTitle = styled.h2`
   font-size: 1.2rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+`;
+
+const SectionTitle = styled.h3`
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem;
 `;
 
 const StatsRow = styled.div`
   display: flex;
-  justify-content: space-around;
-  text-align: center;
+  justify-content: space-between;
+  margin-top: 1rem;
 `;
 
-const StatBlock = styled.div``;
+const StatBox = styled.div`
+  text-align: center;
+  flex: 1;
+`;
 
-const StatLabel = styled.p`
+const Label = styled.p`
+  color: #666;
   font-size: 0.9rem;
-  color: #555;
 `;
 
 const StatValue = styled.p`
   font-size: 1.5rem;
   font-weight: bold;
-  margin-top: 0.3rem;
-`;
-
-const WeekList = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 0.3rem;
-`;
-
-const DayCard = styled.div`
-  background-color: ${({ active }) => (active ? "#dceeff" : "#eaf0f6")};
-  border-radius: 12px;
-  width: 90px;
-  height: 90px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const DayName = styled.p`
-  font-weight: bold;
-  color: ${({ isSunday, isSaturday }) =>
-    isSunday ? "red" : isSaturday ? "#2f5fd7" : "#444"};
-`;
-
-const TimeText = styled.p`
-  font-size: 0.85rem;
-  white-space: pre-line;
-`;
-
-const ProgressBarContainer = styled.div`
-  margin-top: 2rem;
-  position: relative;
-  height: 18px;
-  background: #e0ecf8;
-  border-radius: 6px;
-`;
-
-const ProgressBarFill = styled.div`
-  background: #4ea3ff;
-  height: 100%;
-  width: ${({ width }) => width};
-  border-radius: 6px;
-`;
-
-const BarTextLeft = styled.span`
-  position: absolute;
-  top: 22px;
-  left: 0;
-  font-size: 0.8rem;
-  color: #555;
-`;
-
-const BarTextRight = styled(BarTextLeft)`
-  left: auto;
-  right: 0;
+  margin-top: 0.4rem;
 `;
