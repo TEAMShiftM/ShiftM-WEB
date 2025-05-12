@@ -3,8 +3,13 @@ import {useState} from "react";
 import Header from "../../components/Header.jsx";
 import Button from "../../components/Button.jsx";
 import Input from "../../components/Input.jsx";
+import {useParams} from "react-router-dom";
 
 const EditLeaveType = () => {
+    const {id} = useParams();
+    // TODO 콘솔 제거
+    console.log(id);
+
     const [newName, setNewName] = useState("");
 
     return (
