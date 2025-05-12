@@ -18,7 +18,7 @@ const Header = () => {
 const HeaderS = styled.header`
     width: 100%;
     height: 70px;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: #F9FCFF;
     display: flex;
 
     top: 0;
@@ -31,6 +31,7 @@ const HeaderS = styled.header`
 
     @media (max-width: 768px) {
         height: 60px;
+        position: static;
     }
 `;
 
@@ -50,6 +51,7 @@ const LogoS = styled.div`
 
 const ButtonS = styled.div`
     button {
+        cursor: pointer;
         font-size: 1rem;
         margin-right: 15px;
         width: 100px;
